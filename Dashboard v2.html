@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мой Дашборд Дел</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f5e6d3 0%, #e8d5c4 50%, #f0e0d0 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            color: #4a4a4a;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #7a7a7a;
+            font-size: 1.1em;
+        }
+
+        .controls {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .btn-clear {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.05em;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn-clear:hover {
+            background-color: #ff5252;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .category {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+        }
+
+        .category:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+        }
+
+        .category-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #4a4a4a;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #d4a574;
+        }
+
+        .tasks-container {
+            margin-bottom: 20px;
+            min-height: 100px;
+        }
+
+        .task-card {
+            background: #f9f7f4;
+            border: 2px solid #e8ddd0;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-card:hover {
+            background: #f5ede5;
+            border-color: #d4a574;
+        }
+
+        .task-card.completed {
+            background: #e8f5e9;
+            border-color: #4caf50;
+            opacity: 0.7;
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-text {
+            color: #4a4a4a;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .task-card.completed .task-text {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .task-date {
+            font-size: 0.85em;
+            color: #999;
+            margin-top: 3px;
+        }
+
+        .task-buttons {
+            display: flex;
+            gap: 8px;
+            margin-left: 10px;
+        }
+
+        .btn-complete {
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .btn-complete:hover {
+            background-color: #45a049;
+        }
+
+        .btn-delete {
+            background-color: #ff9800;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .btn-delete:hover {
+            background-color: #fb8c00;
+        }
+
+        .add-task-form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-top: 15px;
+            border-top: 2px solid #e8ddd0;
+        }
+
+        .add-task-form input {
+            padding: 10px;
+            border: 2px solid #e8ddd0;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .add-task-form input:focus {
+            outline: none;
+            border-color: #d4a574;
+            box-shadow: 0 0 8px rgba(212, 165, 116, 0.2);
+        }
+
+        .btn-add {
+            background-color: #d4a574;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-add:hover {
+            background-color: #c49464;
+            transform: translateY(-2px);
+        }
+
+        .savings-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .savings-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #4a4a4a;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 3px solid #d4a574;
+        }
+
+        .savings-form {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .form-group {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 0.9em;
+            color: #7a7a7a;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 10px;
+            border: 2px solid #e8ddd0;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #d4a574;
+            box-shadow: 0 0 8px rgba(212, 165, 116, 0.2);
+        }
+
+        .btn-save-savings {
+            background-color: #d4a574;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .btn-save-savings:hover {
+            background-color: #c49464;
+            transform: translateY(-2px);
+        }
+
+        .savings-display {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f9f7f4;
+            border-radius: 10px;
+            border-left: 4px solid #d4a574;
+        }
+
+        .savings-amount {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #4a4a4a;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: #ccc;
+            font-size: 0.95em;
+        }
+
+        @media (max-width: 768px) {
+            .board {
+                grid-template-columns: 1fr;
+            }
+
+            .savings-form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📋 Мой Дашборд Дел</h1>
+            <p>Управляй своими делами и целями в одном месте</p>
+        </div>
+
+        <div class="controls">
+            <button class="btn-clear" onclick="clearAllTasks()">🗑️ Очистить доску</button>
+        </div>
+
+        <div class="board" id="board"></div>
+
+        <div class="savings-section">
+            <h2 class="savings-title">💰 Накопление</h2>
+            <div class="savings-form">
+                <div class="form-group" style="flex: 2;">
+                    <label for="savings-amount">Сумма для накопления</label>
+                    <input type="number" id="savings-amount" placeholder="Введите сумму" min="0" step="0.01">
+                </div>
+                <div class="form-group">
+                    <label for="savings-currency">Валюта</label>
+                    <select id="savings-currency">
+                        <option value="USD">$ USD</option>
+                        <option value="GEL">₾ GEL</option>
+                        <option value="EUR">€ EUR</option>
+                    </select>
+                </div>
+                <button class="btn-save-savings" onclick="saveSavings()">Добавить</button>
+            </div>
+            <div id="savings-display"></div>
+        </div>
+    </div>
+
+    <script>
+        const categories = [
+            { id: 'shopping', name: '🛒 Покупки' },
+            { id: 'repair', name: '🔧 Ремонт' },
+            { id: 'plans', name: '📅 Планы' },
+            { id: 'food', name: '🧊 Заготовки в холодильнике' },
+            { id: 'cats', name: '🐱 Коты' },        ];
+
+        // Загружаем данные
+        let tasks = JSON.parse(localStorage.getItem('tasks')) || {};
+        let savingsHistory = JSON.parse(localStorage.getItem('savingsHistory')) || [];
+        
+        // Инициализируем категории
+        categories.forEach(cat => {
+            if (!tasks[cat.id]) {
+                tasks[cat.id] = [];
+            }
+        });
+
+        // Рендеруем доску
+        function renderBoard() {
+            const board = document.getElementById('board');
+            board.innerHTML = '';
+
+            categories.forEach(category => {
+                const categoryEl = document.createElement('div');
+                categoryEl.className = 'category';
+
+                let html = `<h2 class="category-title">${category.name}</h2>`;
+                html += '<div class="tasks-container">';
+
+                if (tasks[category.id].length === 0) {
+                    html += '<div class="empty-state">Нет задач</div>';
+                } else {
+                    tasks[category.id].forEach((task, index) => {
+                        const dateStr = task.date ? `<div class="task-date">📅 ${formatDate(task.date)}</div>` : '';
+                        const completedClass = task.completed ? 'completed' : '';
+                        const completeBtn = task.completed ? 'Отменить' : 'Завершено';
+                        
+                        html += `
+                            <div class="task-card ${completedClass}">
+                                <div class="task-content">
+                                    <div class="task-text">${task.text}</div>
+                                    ${dateStr}
+                                </div>
+                                <div class="task-buttons">
+                                    <button class="btn-complete" onclick="toggleTask('${category.id}', ${index})">${completeBtn}</button>
+                                    <button class="btn-delete" onclick="deleteTask('${category.id}', ${index})">✕</button>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                html += '</div>';
+                html += `
+                    <div class="add-task-form">
+                        <input type="text" placeholder="Новая задача..." class="task-input" id="input-${category.id}">
+                        <input type="date" class="task-date-input" id="date-${category.id}">
+                        <button class="btn-add" onclick="addTask('${category.id}')">+ Добавить</button>
+                    </div>
+                `;
+
+                categoryEl.innerHTML = html;
+                board.appendChild(categoryEl);
+
+                // Enter для добавления задачи
+                setTimeout(() => {
+                    const input = document.getElementById(`input-${category.id}`);
+                    if (input) {
+                        input.addEventListener('keypress', (e) => {
+                            if (e.key === 'Enter') addTask(category.id);
+                        });
+                    }
+                }, 0);
+            });
+
+            renderSavings();
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr + 'T00:00:00');
+            return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short', year: 'numeric' });
+        }
+
+        function addTask(categoryId) {
+            const input = document.getElementById(`input-${categoryId}`);
+            const dateInput = document.getElementById(`date-${categoryId}`);
+            const text = input.value.trim();
+            const date = dateInput.value;
+
+            if (text) {
+                tasks[categoryId].push({
+                    text: text,
+                    completed: false,
+                    date: date
+                });
+                saveTasks();
+                renderBoard();
+                input.value = '';
+                dateInput.value = '';
+                input.focus();
+            }
+        }
+
+        function toggleTask(categoryId, index) {
+            tasks[categoryId][index].completed = !tasks[categoryId][index].completed;
+            saveTasks();
+            renderBoard();
+        }
+
+        function deleteTask(categoryId, index) {
+            tasks[categoryId].splice(index, 1);
+            saveTasks();
+            renderBoard();
+        }
+
+        function clearAllTasks() {
+            if (confirm('Вы уверены? Это удалит ВСЕ задачи на доске!')) {
+                categories.forEach(cat => {
+                    tasks[cat.id] = [];
+                });
+                saveTasks();
+                renderBoard();
+            }
+        }
+
+        function saveSavings() {
+            const amount = document.getElementById('savings-amount').value;
+            const currency = document.getElementById('savings-currency').value;
+
+            if (amount && amount > 0) {
+                savingsHistory.push({
+                    amount: parseFloat(amount),
+                    currency: currency,
+                    date: new Date().toISOString()
+                });
+                saveSavingsData();
+                renderSavings();
+                document.getElementById('savings-amount').value = '';
+            }
+        }
+
+        function renderSavings() {
+            const display = document.getElementById('savings-display');
+            
+            if (savingsHistory.length === 0) {
+                display.innerHTML = '<div class="empty-state">Нет данных о накоплении</div>';
+                return;
+            }
+
+            // Группируем по валютам
+            const grouped = {};
+            savingsHistory.forEach(item => {
+                if (!grouped[item.currency]) {
+                    grouped[item.currency] = 0;
+                }
+                grouped[item.currency] += item.amount;
+            });
+
+            let html = '';
+            Object.entries(grouped).forEach(([currency, total]) => {
+                const symbol = { USD: '$', GEL: '₾', EUR: '€' }[currency] || currency;
+                html += `<div class="savings-amount">${symbol} ${total.toFixed(2)} ${currency}</div>`;
+            });
+
+            display.innerHTML = html;
+        }
+
+        function saveTasks() {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+
+        function saveSavingsData() {
+            localStorage.setItem('savingsHistory', JSON.stringify(savingsHistory));
+        }
+
+        // Первый рендер
+        renderBoard();
+    </script>
+</body>
+</html>
